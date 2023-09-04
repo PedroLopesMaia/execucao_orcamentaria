@@ -1,24 +1,17 @@
-import streamlit as st
-import os
-import mysql.connector
-import pandas as pd
-import plotly.express as px
+from graficos import *
 
+st.title('Execução orçamentário do estado de São Paulo')
 
-def estabelecer_conexao_bd():
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="ML$KL9wsJw",
-        database="dw_execucao"
-    )
-    return connection
+st.divider()
+st.write('1º As 8 fontes mais frenquentes nas execuções orçamentárias durante o ano selecionados?')
+primeiroGrafico()
 
+st.write('2º Com qual frequência o estado de São Paulo gastou com "aposentadorias e reformas", "Pensões", "Auxílio alimentação" e "Material de consumo"?')
 
-conexao = estabelecer_conexao_bd()
+st.divider()
+st.write("3º Quantidade de reais que foram empenhados, gastos, liquidados e que foram disponíveis para despesas relativas a gastos com municípios até 2015.")
+terceiroGrafico()
 
-query = "SELECT * FROM dm_tempo;"
-
-df = pd.read_sql(query, conexao)
-
-df
+st.divider()
+st.write("4º Qual é a proporção entre os tipos de despesas?")
+quartoGrafico()
