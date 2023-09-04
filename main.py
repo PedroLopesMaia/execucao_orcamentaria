@@ -3,15 +3,17 @@ from graficos import *
 st.title('Execução orçamentário do estado de São Paulo')
 
 st.divider()
-st.write('1º As 8 fontes mais frenquentes nas execuções orçamentárias durante o ano selecionados?')
+st.write('1º As 7 maiores modalidades de despesas do estado de São Paulo.')
 primeiroGrafico()
 
-st.write('2º Com qual frequência o estado de São Paulo gastou com "aposentadorias e reformas", "Pensões", "Auxílio alimentação" e "Material de consumo"?')
+st.divider()
+st.write('2º Transferências de fontes conhecidas realizadas no período selecionado.')
+segundoGrafico()
 
 st.divider()
-st.write("3º Quantidade de reais que foram empenhados, gastos, liquidados e que foram disponíveis para despesas relativas a gastos com municípios até 2015.")
+st.write("3º Quantidade de reais que foram empenhados, gastos, liquidados ou que foram disponibilizados.")
 terceiroGrafico()
 
 st.divider()
-st.write("4º Qual é a proporção entre os tipos de despesas?")
+st.write("4º Proporção entre os tipos de despesas")
 quartoGrafico()
