@@ -3,26 +3,43 @@ import altair as alt
 from functions import *
 from queries import *
 
-def primeiroGrafico():
-    resposta1 = getResposta(query1)
+def primeiroGrafico(anos, despesas):
+    if len(anos) != 0 and len(despesas) != 0:
+        resposta = atualizaDataframeDoisFiltros(query1, query1_filter, anos, despesas, '{AnoExercicio}', '{despesa}', ['Frequência'], 'Modalidade')
+    elif len(anos) != 0 and len(despesas) == 0:
+        resposta = atualizaDataframeUmFiltro(query1, query1_filter_ano, anos, '{AnoExercicio}', ['Frequência'], 'Modalidade')
+    elif len(anos) == 0 and len(despesas) != 0:
+        resposta = atualizaDataframeUmFiltro(query1, query1_filter_despesa, despesas, '{despesa}', ['Frequência'], 'Modalidade')
+    else:
+        resposta = getResposta(query1)
     st.bar_chart(
-        resposta1,
-        x='Nome',
+        resposta,
+        x='Modalidade',
         y='Frequência',
         width=400,
         height=600,
     )
 
-def segundoGrafico():
-    resposta2 = getResposta(query2)
-    resposta2 = resposta2.iloc[1:]
-    c = alt.Chart(resposta2).mark_circle().encode(
+def segundoGrafico(anos, despesas):
+    if len(anos) != 0 and len(despesas) != 0:
+        resposta = atualizaDataframeDoisFiltros(query2, query2_filter, anos, despesas, '{AnoExercicio}', '{despesa}', ['Frequência'], 'Fonte')
+    elif len(anos) != 0 and len(despesas) == 0:
+        resposta = atualizaDataframeUmFiltro(query2, query2_filter_ano, anos, '{AnoExercicio}', ['Frequência'], 'Fonte')
+    elif len(anos) == 0 and len(despesas) != 0:
+        resposta = atualizaDataframeUmFiltro(query2, query2_filter_despesa, despesas, '{despesa}', ['Frequência'], 'Fonte')
+    else:
+        resposta = getResposta(query2)
+    resposta = resposta.iloc[1:]
+    c = alt.Chart(resposta).mark_circle().encode(
         x='Frequência', y='Fonte', size='Frequência', color='Frequência', tooltip=['Frequência','Fonte'])
     st.altair_chart(c, use_container_width=True)
 
 
-def terceiroGrafico(filtros):
-    resposta = atualizaDataframe(query3, query3_filter, filtros, '{despesa}', ['Pago', 'Empenhado', 'Liquidado', 'Disponivel'])
+def terceiroGrafico(despesas):
+    if len(despesas) != 0:
+        resposta = atualizaDataframeUmFiltro(query3, query3_filter_despesa, despesas, '{despesa}', ['Pago', 'Empenhado', 'Liquidado', 'Disponivel'], 'Ano')
+    else:
+        resposta = getResposta(query3)
     resposta['Ano'] = resposta['Ano'].apply(removeVirgula)
     st.line_chart(
         resposta,
@@ -30,22 +47,15 @@ def terceiroGrafico(filtros):
         x='Ano'
     )
 
-def filtroAnos():
-    anos = getResposta(query_anos).iloc[1:]
-    options = st.multiselect(
-        'Ano de exercício:', anos)
-    return options
-
-def filtroDespesa():
-    despesas = getResposta(query_despesas).iloc[1:]
-    options = st.multiselect(
-        'Nome da despesa:', despesas)
-    return options
-
-
-def quartoGrafico(lista_anos):
-    resposta = atualizaDataframe(query4, query4_filter, lista_anos, '{AnoExercicio}', ['quantidade'])
-
+def quartoGrafico(anos, despesas):
+    if len(anos) != 0 and len(despesas) != 0:
+        resposta = atualizaDataframeDoisFiltros(query4, query4_filter, anos, despesas, '{AnoExercicio}', '{despesa}', ['quantidade'], 'categoria')
+    elif len(anos) != 0 and len(despesas) == 0:
+        resposta = atualizaDataframeUmFiltro(query4, query4_filter_ano, anos, '{AnoExercicio}', ['quantidade'], 'categoria')
+    elif len(anos) == 0 and len(despesas) != 0:
+        resposta = atualizaDataframeUmFiltro(query4, query4_filter_despesa, despesas, '{despesa}', ['quantidade'], 'categoria')
+    else:
+        resposta = getResposta(query4)
     categoria = ["Despesas de Capital", "Despesas Correntes", "Reserva Contigencial"]
     cores = ["#aa423a", "#f6b404", "#327a88"]
     categoria_select = alt.selection_single(fields=["categoria"], empty="all")

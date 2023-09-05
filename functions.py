@@ -2,6 +2,8 @@ import mysql.connector
 import streamlit as st
 import pandas as pd
 
+from queries import *
+
 def getConexao():
     connection = mysql.connector.connect(
         host="localhost",
@@ -11,20 +13,51 @@ def getConexao():
     )
     return connection
 
-def atualizaDataframe(query, query_filter, lista, token, propriedades):
-    dataframes = []
+def filtroAnos():
+    anos = getResposta(query_anos).iloc[1:]
+    options = st.multiselect(
+        'Ano de exercício:', anos)
+    return options
+
+def filtroDespesa():
+    despesas = getResposta(query_despesas).iloc[1:]
+    options = st.multiselect(
+        'Nome da despesa:', despesas)
+    return options
+
+def atualizaDataframeDoisFiltros(query, query_filtro, lista_anos, Lista_despesas, token_ano, token_despesa, propriedades,
+                                subset_remoção):
+    dfs = []
+    for ano in lista_anos:
+        query_filter = query_filtro.replace(token_ano, str(ano))
+        dfs.append(atualizaDataframeUmFiltro(query, query_filter, Lista_despesas, token_despesa, propriedades, subset_remoção))
+    return somaDfs(dfs, propriedades, subset_remoção)
+
+def atualizaDataframeUmFiltro(query, query_filter, lista, token, propriedades, subset_remoção):
+    df = getResposta(query)
+    for i in propriedades:
+        df[i].values[:] = 0
+    dataframes = [df]
     if len(lista) != 0:
-        for ano in lista:
-            query = query_filter.replace(token, str(ano))
+        for placeholder in lista:
+            query = query_filter.replace(token, str(placeholder))
             dataframes.append(getResposta(query))
-        for i in range(len(dataframes)):
-            if i == 0:
-                resposta = dataframes[0]
-            else:
-                for propriedade in propriedades:
-                    resposta[propriedade] = resposta[propriedade] + dataframes[i][propriedade]
+        resposta = somaDfs(dataframes, propriedades, subset_remoção)
     else:
         resposta = getResposta(query)
+    return resposta
+
+def somaDfs(dataframes, propriedades, subset_remoção):
+    for i in range(len(dataframes)):
+        if i == 0:
+            resposta = dataframes[0]
+        else:
+            for propriedade in propriedades:
+                temp = resposta.copy()
+                temp[propriedade] = resposta[propriedade] + dataframes[i][propriedade]
+                temp = temp.dropna()
+                resposta = pd.concat([resposta, temp], axis=0)
+                resposta = resposta.drop_duplicates(subset=[subset_remoção], keep='last')
     return resposta
 
 def removeVirgula(x):

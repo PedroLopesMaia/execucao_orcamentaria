@@ -1,12 +1,12 @@
 # Pesquisa por todas as modalidades de despesas
-query1 = "SELECT COUNT(nome) AS Frequência, nome AS Nome " \
+query1 = "SELECT COUNT(nome) AS Frequência, nome AS Modalidade " \
          "from dm_modalidade " \
          "INNER JOIN ft_pagamento " \
          "on modalidadekey = dm_modalidade.key " \
          "GROUP BY nome;"
 
 # Pesquisa por modalidades de despesas, filtradas por anos de exercício e despesas
-query1_filter = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.nome AS modalidade " \
+query1_filter = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.nome AS Modalidade " \
                 "from dm_modalidade INNER JOIN ft_pagamento " \
                 "on modalidadekey = dm_modalidade.key " \
                 "INNER JOIN dm_tempo " \
@@ -18,7 +18,7 @@ query1_filter = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.
                 "GROUP BY dm_modalidade.nome;"
 
 # Pesquisa por modalidades de despesa, filtradas por anos de exercício
-query1_filter_ano = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.nome AS modalidade " \
+query1_filter_ano = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.nome AS Modalidade " \
                     "from dm_modalidade INNER JOIN ft_pagamento " \
                     "on modalidadekey = dm_modalidade.key " \
                     "INNER JOIN dm_tempo " \
@@ -27,7 +27,7 @@ query1_filter_ano = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalid
                     "GROUP BY dm_modalidade.nome;"
 
 # Pesquisa por modalidades de despesa, filtradas por despesas
-query1_filter_despesa = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.nome AS modalidade " \
+query1_filter_despesa = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_modalidade.nome AS Modalidade " \
                         "from dm_modalidade " \
                         "INNER JOIN ft_pagamento " \
                         "on modalidadekey = dm_modalidade.key " \
@@ -115,10 +115,10 @@ query4_filter = "SELECT COUNT(dm_categoria_despesa.nome) AS quantidade, dm_categ
                 "on dm_despesa.key = despesakey " \
                 "INNER JOIN dm_tempo " \
                 "on dm_tempo.key = tempokey " \
-                "GROUP BY dm_categoria_despesa.nome " \
                 "WHERE AnoExercicio = {AnoExercicio} " \
                 "AND dm_despesa.nome = '{despesa}' " \
-                "ORDER BY quantidade DESC;"
+                "GROUP BY dm_categoria_despesa.nome " \
+                "ORDER BY dm_categoria_despesa.nome DESC;"
 
 # Pesquisa por categorias de despesas, filtradas por anos de exercício
 query4_filter_ano = "SELECT COUNT(nome) AS quantidade, nome AS categoria " \
