@@ -1,27 +1,7 @@
-import streamlit as st
 import altair as alt
-import plotly.express as px
-import pandas as pd
-from functools import reduce
 
 from functions import *
-
-query1 = "SELECT COUNT(nome) AS Frequência, nome AS Nome from dm_modalidade INNER JOIN ft_pagamento on modalidadekey = " \
-         "dm_modalidade.key GROUP BY nome;"
-query4_filter = "SELECT COUNT(nome) AS quantidade, nome AS categoria, AnoExercicio from dm_categoria_despesa INNER JOIN " \
-         "ft_pagamento on categoria_despesakey = dm_categoria_despesa.key INNER JOIN dm_tempo on dm_tempo.key = " \
-         "ft_pagamento.tempokey WHERE AnoExercicio = {AnoExercicio} GROUP BY nome ORDER BY quantidade DESC;"
-query4 = "SELECT COUNT(nome) AS quantidade, nome AS categoria from dm_categoria_despesa INNER JOIN " \
-         "ft_pagamento on categoria_despesakey = dm_categoria_despesa.key GROUP BY nome ORDER BY quantidade DESC;"
-query2 = "SELECT COUNT(nome) AS Frequência, nome AS Fonte from dm_fonte INNER JOIN ft_pagamento on fontekey = dm_fonte.key" \
-         " GROUP BY nome ORDER BY Frequência DESC;"
-query3 = "SELECT Vl_Pago AS Pago, Vl_EmpenhadoLiquido AS Empenhado, Vl_Liquidado AS Liquidado, Disponivel, AnoExercicio" \
-         " AS Ano from ft_pagamento INNER JOIN dm_tempo on ft_pagamento.tempokey = dm_tempo.key GROUP BY Ano; "
-query3_filter = "SELECT Vl_Pago AS Pago, Vl_EmpenhadoLiquido AS Empenhado, Vl_Liquidado AS Liquidado, Disponivel, AnoExercicio " \
-         "AS Ano, nome As despesa from ft_pagamento INNER JOIN dm_tempo on tempokey = dm_tempo.key INNER JOIN dm_despesa " \
-         "on despesakey = dm_despesa.key WHERE nome = '{despesa}' GROUP BY Ano;"
-query_anos = "SELECT AnoExercicio from dm_tempo GROUP BY AnoExercicio;"
-query_despesas = "SELECT nome from dm_despesa GROUP BY nome;"
+from queries import *
 
 def primeiroGrafico():
     resposta1 = getResposta(query1)
@@ -30,7 +10,7 @@ def primeiroGrafico():
         x='Nome',
         y='Frequência',
         width=400,
-        height=600
+        height=600,
     )
 
 def segundoGrafico():
