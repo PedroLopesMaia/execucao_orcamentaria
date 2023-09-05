@@ -11,6 +11,22 @@ def getConexao():
     )
     return connection
 
+def atualizaDataframe(query, query_filter, lista, token, propriedades):
+    dataframes = []
+    if len(lista) != 0:
+        for ano in lista:
+            query = query_filter.replace(token, str(ano))
+            dataframes.append(getResposta(query))
+        for i in range(len(dataframes)):
+            if i == 0:
+                resposta = dataframes[0]
+            else:
+                for propriedade in propriedades:
+                    resposta[propriedade] = resposta[propriedade] + dataframes[i][propriedade]
+    else:
+        resposta = getResposta(query)
+    return resposta
+
 def removeVirgula(x):
     x = str(x).replace(',', '')
     return x

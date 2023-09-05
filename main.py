@@ -12,9 +12,10 @@ segundoGrafico()
 
 st.divider()
 st.write("3º Quantidade de reais que foram empenhados, gastos, liquidados ou que foram disponibilizados.")
-terceiroGrafico()
+filtro3 = filtroDespesa()
+terceiroGrafico(filtro3)
 
 st.divider()
 st.write("4º Proporção entre os tipos de despesas")
-filtro = filtroAnos()
-quartoGrafico(filtro)
+filtro4 = filtroAnos()
+quartoGrafico(filtro4)

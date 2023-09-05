@@ -4,7 +4,7 @@ import plotly.express as px
 import pandas as pd
 from functools import reduce
 
-from functions import removeVirgula, getResposta
+from functions import *
 
 query1 = "SELECT COUNT(nome) AS Frequência, nome AS Nome from dm_modalidade INNER JOIN ft_pagamento on modalidadekey = " \
          "dm_modalidade.key GROUP BY nome;"
@@ -17,7 +17,11 @@ query2 = "SELECT COUNT(nome) AS Frequência, nome AS Fonte from dm_fonte INNER J
          " GROUP BY nome ORDER BY Frequência DESC;"
 query3 = "SELECT Vl_Pago AS Pago, Vl_EmpenhadoLiquido AS Empenhado, Vl_Liquidado AS Liquidado, Disponivel, AnoExercicio" \
          " AS Ano from ft_pagamento INNER JOIN dm_tempo on ft_pagamento.tempokey = dm_tempo.key GROUP BY Ano; "
+query3_filter = "SELECT Vl_Pago AS Pago, Vl_EmpenhadoLiquido AS Empenhado, Vl_Liquidado AS Liquidado, Disponivel, AnoExercicio " \
+         "AS Ano, nome As despesa from ft_pagamento INNER JOIN dm_tempo on tempokey = dm_tempo.key INNER JOIN dm_despesa " \
+         "on despesakey = dm_despesa.key WHERE nome = '{despesa}' GROUP BY Ano;"
 query_anos = "SELECT AnoExercicio from dm_tempo GROUP BY AnoExercicio;"
+query_despesas = "SELECT nome from dm_despesa GROUP BY nome;"
 
 def primeiroGrafico():
     resposta1 = getResposta(query1)
@@ -37,11 +41,11 @@ def segundoGrafico():
     st.altair_chart(c, use_container_width=True)
 
 
-def terceiroGrafico():
-    resposta3 = getResposta(query3)
-    resposta3['Ano'] = resposta3['Ano'].apply(removeVirgula)
+def terceiroGrafico(filtros):
+    resposta = atualizaDataframe(query3, query3_filter, filtros, '{despesa}', ['Pago', 'Empenhado', 'Liquidado', 'Disponivel'])
+    resposta['Ano'] = resposta['Ano'].apply(removeVirgula)
     st.line_chart(
-        resposta3,
+        resposta,
         y=['Pago', 'Empenhado', 'Liquidado', 'Disponivel'],
         x='Ano'
     )
@@ -52,27 +56,22 @@ def filtroAnos():
         'Ano de exercício:', anos)
     return options
 
+def filtroDespesa():
+    despesas = getResposta(query_despesas).iloc[1:]
+    options = st.multiselect(
+        'Nome da despesa:', despesas)
+    return options
+
 
 def quartoGrafico(lista_anos):
-    dataframes = []
-    if len(lista_anos) != 0:
-        for ano in lista_anos:
-            query = query4_filter.replace('{AnoExercicio}', str(ano))
-            dataframes.append(getResposta(query))
-        for i in range(len(dataframes)):
-            if i == 0:
-                resposta4 = dataframes[0]
-            else:
-                resposta4['quantidade'] = resposta4['quantidade'] + dataframes[i]['quantidade']
-    else:
-        resposta4 = getResposta(query4)
+    resposta = atualizaDataframe(query4, query4_filter, lista_anos, '{AnoExercicio}', ['quantidade'])
 
     categoria = ["Despesas de Capital", "Despesas Correntes", "Reserva Contigencial"]
     cores = ["#aa423a", "#f6b404", "#327a88"]
     categoria_select = alt.selection_single(fields=["categoria"], empty="all")
     categoria_pie = (
         (
-            alt.Chart(resposta4)
+            alt.Chart(resposta)
             .mark_arc(innerRadius=50)
             .encode(
                 theta=alt.Theta(
