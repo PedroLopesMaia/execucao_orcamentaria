@@ -81,15 +81,14 @@ query2_filter_despesa = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.no
                         "ORDER BY Frequência DESC;"
 
 # Pesquisa por todos os valores monetários
-query3 = "SELECT Vl_Pago AS Pago, Vl_EmpenhadoLiquido AS Empenhado, Vl_Liquidado AS Liquidado, Disponivel, AnoExercicio AS Ano " \
+query3 = "SELECT avg(Vl_Pago) AS Pago, avg(Vl_EmpenhadoLiquido) AS Empenhado, avg(Vl_Liquidado) AS Liquidado, avg(Disponivel) AS Disponivel, AnoExercicio AS Ano " \
          "from ft_pagamento " \
          "INNER JOIN dm_tempo " \
          "on ft_pagamento.tempokey = dm_tempo.key " \
          "GROUP BY Ano; "
 
-
 # Pesquisa por os valores monetários, filtrados por despesas
-query3_filter_despesa = "SELECT Vl_Pago AS Pago, Vl_EmpenhadoLiquido AS Empenhado, Vl_Liquidado AS Liquidado, Disponivel, AnoExercicio AS Ano " \
+query3_filter_despesa = "SELECT avg(Vl_Pago) AS Pago, avg(Vl_EmpenhadoLiquido) AS Empenhado, avg(Vl_Liquidado) AS Liquidado, avg(Disponivel) AS Disponivel, AnoExercicio AS Ano " \
                         "from ft_pagamento " \
                         "INNER JOIN dm_tempo " \
                         "on tempokey = dm_tempo.key " \

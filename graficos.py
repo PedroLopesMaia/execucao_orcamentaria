@@ -13,6 +13,7 @@ def primeiroGrafico(anos, despesas):
     else:
         resposta = getResposta(query1)
     resposta['Modalidade'] = resposta['Modalidade'].apply(lambda x : fix_encoding(x))
+
     st.bar_chart(
         resposta,
         x='Modalidade',
@@ -44,7 +45,7 @@ def terceiroGrafico(despesas):
         resposta = getResposta(query3)
     resposta['Ano'] = resposta['Ano'].apply(removeVirgula)
     st.line_chart(
-        resposta,
+        resposta.iloc[2:],
         y=['Pago', 'Empenhado', 'Liquidado', 'Disponivel'],
         x='Ano'
     )

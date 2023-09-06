@@ -13,6 +13,10 @@ def getConexao():
     )
     return connection
 
+def createNameColumn(df):
+    nome = [df.columns[0] for i in range(len(df.index))]
+    df['Nome'] = nome
+    return df
 def filtroAnos():
     anos = getResposta(query_anos).iloc[1:]
     options = st.multiselect(
