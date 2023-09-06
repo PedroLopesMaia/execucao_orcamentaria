@@ -21,9 +21,23 @@ def filtroAnos():
 
 def filtroDespesa():
     despesas = getResposta(query_despesas).iloc[1:]
+    filtro = despesas.copy()
+    filtro['nome'] = filtro['nome'].apply(lambda x: fix_encoding(x))
     options = st.multiselect(
-        'Nome da despesa:', despesas)
-    return options
+        'Nome da despesa:', filtro)
+    return unfix_encoding(despesas, filtro, options)
+
+def fix_encoding(string):
+    return string.encode('cp1252').decode('utf8')
+
+def unfix_encoding(resposta, filtro, options):
+    dic_resposta = resposta.to_dict()
+    dic_filtro = filtro.to_dict()['nome']
+    filtro_dic = {}
+    for i in range(len(dic_filtro)):
+        filtro_dic[dic_filtro[i+1]] = i+1
+    return [dic_resposta['nome'][filtro_dic[string]] for string in options]
+
 
 def atualizaDataframeDoisFiltros(query, query_filtro, lista_anos, Lista_despesas, token_ano, token_despesa, propriedades,
                                 subset_remoção):

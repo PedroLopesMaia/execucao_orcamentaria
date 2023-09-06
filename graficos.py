@@ -12,6 +12,7 @@ def primeiroGrafico(anos, despesas):
         resposta = atualizaDataframeUmFiltro(query1, query1_filter_despesa, despesas, '{despesa}', ['Frequência'], 'Modalidade')
     else:
         resposta = getResposta(query1)
+    resposta['Modalidade'] = resposta['Modalidade'].apply(lambda x : fix_encoding(x))
     st.bar_chart(
         resposta,
         x='Modalidade',
@@ -30,6 +31,7 @@ def segundoGrafico(anos, despesas):
     else:
         resposta = getResposta(query2)
     resposta = resposta.iloc[1:]
+    resposta['Fonte'] = resposta['Fonte'].apply(lambda x: fix_encoding(x))
     c = alt.Chart(resposta).mark_circle().encode(
         x='Frequência', y='Fonte', size='Frequência', color='Frequência', tooltip=['Frequência','Fonte'])
     st.altair_chart(c, use_container_width=True)
