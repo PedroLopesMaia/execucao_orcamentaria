@@ -8,7 +8,7 @@ despesas = filtroDespesa()
 anos = filtroAnos()
 
 st.divider()
-st.write("Quantidade média de reais empenhados, gastos, liquidados ou que estavam disponíveis.")
+st.write("Valor total em reais que foram empenhados, gastos, liquidados ou que estavam disponíveis.")
 terceiroGrafico(despesas)
 
 st.divider()
