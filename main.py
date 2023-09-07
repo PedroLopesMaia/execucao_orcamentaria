@@ -20,5 +20,9 @@ st.write("Proporção entre os tipos de despesas.")
 quartoGrafico(anos, despesas)
 
 st.divider()
+st.write("Vinte maiores despesas em quantidade")
+quintoGrafico(anos, despesas)
+
+st.divider()
 st.write('Fonte(s) recorridas para os pagamentos realizados no período selecionado.')
 segundoGrafico(anos, despesas)

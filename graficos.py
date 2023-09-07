@@ -22,6 +22,19 @@ def primeiroGrafico(anos, despesas):
         height=600,
     )
 
+def quintoGrafico(anos, despesas):
+    if len(anos) != 0 and len(despesas) == 0:
+        resposta = atualizaDataframeUmFiltro(query5, query5_filter_ano, anos, '{AnoExercicio}', ['Quantidade'],
+                                             'Despesa')
+        resposta= resposta[resposta['Quantidade'] != 0]
+    else:
+        resposta = getResposta(query5)
+    resposta['Despesa'] = resposta['Despesa'].apply(lambda x: fix_encoding(x))
+    c = alt.Chart(resposta.iloc[:20]).mark_circle().encode(
+        x='Quantidade', y='Despesa', size='Quantidade', color='Quantidade', tooltip=['Quantidade','Despesa'])
+    st.altair_chart(c, use_container_width=True)
+
+
 def segundoGrafico(anos, despesas):
     if len(anos) != 0 and len(despesas) != 0:
         resposta = atualizaDataframeDoisFiltros(query2, query2_filter, anos, despesas, '{AnoExercicio}', '{despesa}', ['Frequência'], 'Fonte')
@@ -33,9 +46,16 @@ def segundoGrafico(anos, despesas):
         resposta = getResposta(query2)
     resposta = resposta.iloc[1:]
     resposta['Fonte'] = resposta['Fonte'].apply(lambda x: fix_encoding(x))
-    c = alt.Chart(resposta).mark_circle().encode(
-        x='Frequência', y='Fonte', size='Frequência', color='Frequência', tooltip=['Frequência','Fonte'])
-    st.altair_chart(c, use_container_width=True)
+    st.bar_chart(
+        resposta,
+        x='Fonte',
+        y='Frequência',
+        width=400,
+        height=600,
+    )
+    # c = alt.Chart(resposta).mark_circle().encode(
+    #     x='Frequência', y='Fonte', size='Frequência', color='Frequência', tooltip=['Frequência','Fonte'])
+    # st.altair_chart(c, use_container_width=True)
 
 
 def terceiroGrafico(despesas):

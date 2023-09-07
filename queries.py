@@ -141,6 +141,42 @@ query4_filter_despesa = "SELECT COUNT(dm_categoria_despesa.nome) AS quantidade, 
                         "GROUP BY dm_categoria_despesa.nome " \
                         "ORDER BY quantidade DESC;"
 
+query5 = "SELECT dm_despesa.nome AS Despesa, count(dm_despesa.nome) AS Quantidade " \
+         "from dm_despesa " \
+         "INNER JOIN ft_pagamento " \
+         "on despesakey = dm_despesa.key " \
+         "GROUP BY Despesa " \
+         "ORDER BY quantidade DESC;"
+
+# query5_filter_despesa = "SELECT dm_despesa.nome AS Despesa, count(dm_despesa.nome) AS Quantidade " \
+#          "from dm_despesa " \
+#          "INNER JOIN ft_pagamento " \
+#          "on despesakey = dm_despesa.key " \
+#          "WHERE despesa = {despesa} " \
+#          "GROUP BY Despesa " \
+#          "ORDER BY quantidade DESC;"
+
+query5_filter_ano = "SELECT dm_despesa.nome AS Despesa, count(dm_despesa.nome) AS Quantidade " \
+         "from dm_despesa " \
+         "INNER JOIN ft_pagamento " \
+         "on despesakey = dm_despesa.key " \
+         "INNER JOIN dm_tempo " \
+         "on dm_tempo.key = tempokey " \
+         "WHERE AnoExercicio = {AnoExercicio} " \
+         "GROUP BY Despesa " \
+         "ORDER BY Quantidade DESC;"
+
+# query5_filter = "SELECT dm_despesa.nome AS Despesa, count(dm_despesa.nome) AS Quantidade " \
+#          "from dm_despesa " \
+#          "INNER JOIN ft_pagamento " \
+#          "on despesakey = dm_despesa.key " \
+#          "INNER JOIN dm_tempo " \
+#          "on dm_tempo.key = tempokey " \
+#          "WHERE AnoExercicio = {AnoExercicio} " \
+#          "AND Despesa = {despesa}" \
+#          "GROUP BY Despesa " \
+#          "ORDER BY quantidade DESC;"
+
 query_anos = "SELECT AnoExercicio from dm_tempo GROUP BY AnoExercicio;"
 
 query_despesas = "SELECT nome from dm_despesa GROUP BY nome;"
