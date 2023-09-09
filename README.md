@@ -10,7 +10,7 @@ Para instalar as depedências necessárias para o funcionamento do aplicativo, b
 
     pip install -r requirements.txt
 
-No arquivo "requirements.txt" estão listadas as bibliotecas/módulos utilizados e suas versões.
+No arquivo "requirements.txt" estão listadas as bibliotecas/módulos utilizados e suas versões. O data warehouse foi construído com o sistema de gerenciamento MySQL, e para que a leitura dos dados possa ser feita pela aplicação, é preciso que o arquivo presente na pasta "DW" seja importado nesse sistema.
 
 ## Variáveis de Ambiente
 
