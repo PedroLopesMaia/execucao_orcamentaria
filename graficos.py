@@ -37,11 +37,11 @@ def quintoGrafico(anos, despesas):
 
 def segundoGrafico(anos, despesas):
     if len(anos) != 0 and len(despesas) != 0:
-        resposta = atualizaDataframeDoisFiltros(query2, query2_filter, anos, despesas, '{AnoExercicio}', '{despesa}', ['Frequência'], 'Fonte')
+        resposta = atualizaDataframeDoisFiltros(query2, query2_filter, anos, despesas, '{AnoExercicio}', '{despesa}', ['Valor'], 'Fonte')
     elif len(anos) != 0 and len(despesas) == 0:
-        resposta = atualizaDataframeUmFiltro(query2, query2_filter_ano, anos, '{AnoExercicio}', ['Frequência'], 'Fonte')
+        resposta = atualizaDataframeUmFiltro(query2, query2_filter_ano, anos, '{AnoExercicio}', ['Valor'], 'Fonte')
     elif len(anos) == 0 and len(despesas) != 0:
-        resposta = atualizaDataframeUmFiltro(query2, query2_filter_despesa, despesas, '{despesa}', ['Frequência'], 'Fonte')
+        resposta = atualizaDataframeUmFiltro(query2, query2_filter_despesa, despesas, '{despesa}', ['Valor'], 'Fonte')
     else:
         resposta = getResposta(query2)
     resposta = resposta.iloc[1:]
@@ -49,7 +49,7 @@ def segundoGrafico(anos, despesas):
     st.bar_chart(
         resposta,
         x='Fonte',
-        y='Frequência',
+        y='Valor',
         width=400,
         height=600,
     )

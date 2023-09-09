@@ -37,15 +37,28 @@ query1_filter_despesa = "SELECT COUNT(dm_modalidade.nome) AS Frequência, dm_mod
                         "GROUP BY dm_modalidade.nome;"
 
 # Pesquisa por todas as fontes de recursos
-query2 = "SELECT COUNT(nome) AS Frequência, nome AS Fonte " \
+query2 = "SELECT SUM(Vl_pago) AS Valor, nome AS Fonte " \
          "from dm_fonte " \
          "INNER JOIN ft_pagamento " \
          "on fontekey = dm_fonte.key " \
          "GROUP BY nome " \
-         "ORDER BY Frequência DESC;"
+         "ORDER BY Valor DESC;"
 
 # Pesquisa por fontes de recursos, filtradas por anos de exercício e despesas
-query2_filter = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fonte " \
+# query2_filter = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fonte " \
+#                 "from dm_fonte " \
+#                 "INNER JOIN ft_pagamento " \
+#                 "on fontekey = dm_fonte.key " \
+#                 "INNER JOIN dm_tempo " \
+#                 "on dm_tempo.key = tempokey " \
+#                 "INNER JOIN dm_despesa " \
+#                 "on dm_despesa.key = despesakey " \
+#                 "WHERE AnoExercicio = {AnoExercicio} " \
+#                 "AND dm_despesa.nome = '{despesa}' " \
+#                 "GROUP BY dm_fonte.nome " \
+#                 "ORDER BY Frequência DESC;"
+
+query2_filter = "SELECT SUM(Vl_Pago) AS Valor, dm_fonte.nome AS Fonte " \
                 "from dm_fonte " \
                 "INNER JOIN ft_pagamento " \
                 "on fontekey = dm_fonte.key " \
@@ -55,30 +68,50 @@ query2_filter = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fo
                 "on dm_despesa.key = despesakey " \
                 "WHERE AnoExercicio = {AnoExercicio} " \
                 "AND dm_despesa.nome = '{despesa}' " \
-                "GROUP BY dm_fonte.nome " \
-                "ORDER BY Frequência DESC;"
+                "GROUP BY Fonte " \
+                "ORDER BY Valor DESC;"
 
 # Pesquisa por modalidades de despesa, filtradas por anos de exercício
-query2_filter_ano = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fonte " \
-                    "from dm_fonte " \
-                    "INNER JOIN ft_pagamento " \
-                    "on fontekey = dm_fonte.key " \
-                    "INNER JOIN dm_tempo " \
-                    "on dm_tempo.key = tempokey " \
-                    "WHERE AnoExercicio = {AnoExercicio} " \
-                    "GROUP BY dm_fonte.nome " \
-                    "ORDER BY Frequência DESC;"
+# query2_filter_ano = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fonte " \
+#                     "from dm_fonte " \
+#                     "INNER JOIN ft_pagamento " \
+#                     "on fontekey = dm_fonte.key " \
+#                     "INNER JOIN dm_tempo " \
+#                     "on dm_tempo.key = tempokey " \
+#                     "WHERE AnoExercicio = {AnoExercicio} " \
+#                     "GROUP BY dm_fonte.nome " \
+#                     "ORDER BY Frequência DESC;"
+
+query2_filter_ano = "SELECT SUM(Vl_Pago) AS Valor, dm_fonte.nome AS Fonte " \
+                "from dm_fonte " \
+                "INNER JOIN ft_pagamento " \
+                "on fontekey = dm_fonte.key " \
+                "INNER JOIN dm_tempo " \
+                "on dm_tempo.key = tempokey " \
+                "WHERE AnoExercicio = {AnoExercicio} " \
+                "GROUP BY Fonte " \
+                "ORDER BY Valor DESC;"
 
 # Pesquisa por modalidades de despesa, filtradas por despesas
-query2_filter_despesa = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fonte " \
-                        "from dm_fonte " \
-                        "INNER JOIN ft_pagamento " \
-                        "on fontekey = dm_fonte.key " \
-                        "INNER JOIN dm_despesa " \
-                        "on dm_despesa.key = despesakey " \
-                        "WHERE dm_despesa.nome = '{despesa}' " \
-                        "GROUP BY dm_fonte.nome " \
-                        "ORDER BY Frequência DESC;"
+# query2_filter_despesa = "SELECT COUNT(dm_fonte.nome) AS Frequência, dm_fonte.nome AS Fonte " \
+#                         "from dm_fonte " \
+#                         "INNER JOIN ft_pagamento " \
+#                         "on fontekey = dm_fonte.key " \
+#                         "INNER JOIN dm_despesa " \
+#                         "on dm_despesa.key = despesakey " \
+#                         "WHERE dm_despesa.nome = '{despesa}' " \
+#                         "GROUP BY dm_fonte.nome " \
+#                         "ORDER BY Frequência DESC;"
+
+query2_filter_despesa = "SELECT SUM(Vl_Pago) AS Valor, dm_fonte.nome AS Fonte " \
+                "from dm_fonte " \
+                "INNER JOIN ft_pagamento " \
+                "on fontekey = dm_fonte.key " \
+                "INNER JOIN dm_despesa " \
+                "on dm_despesa.key = despesakey " \
+                "AND dm_despesa.nome = '{despesa}' " \
+                "GROUP BY Fonte " \
+                "ORDER BY Valor DESC;"
 
 # Pesquisa por todos os valores monetários
 query3 = "SELECT sum(Vl_Pago) AS Pago, sum(Vl_EmpenhadoLiquido) AS Empenhado, sum(Vl_Liquidado) AS Liquidado, sum(Disponivel) AS Disponivel, AnoExercicio AS Ano " \
